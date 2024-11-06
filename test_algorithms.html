@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>算法测试页面</title>
+</head>
+<body>
+    <h1>算法测试页面</h1>
+    <div id="result"></div>
+
+    <script>
+        // 1. 快速排序算法
+        function quickSort(array) {
+            if (array.length <= 1) return array;
+            
+            const pivot = array[Math.floor(array.length / 2)];
+            const left = array.filter(x => x < pivot);
+            const middle = array.filter(x => x === pivot);
+            const right = array.filter(x => x > pivot);
+            
+            return [...quickSort(left), ...middle, ...quickSort(right)];
+        }
+
+        // 2. 二分查找算法
+        function binarySearch(array, target) {
+            let left = 0;
+            let right = array.length - 1;
+            
+            while (left <= right) {
+                const mid = Math.floor((left + right) / 2);
+                if (array[mid] === target) return mid;
+                if (array[mid] < target) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+            return -1;
+        }
+
+        // 3. MD5加密算法模拟
+        function simpleMD5(message) {
+            let hash = 0;
+            for (let i = 0; i < message.length; i++) {
+                const char = message.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash.toString(16);
+        }
+
+        // 4. 深度优先搜索
+        function depthFirstSearch(graph, start) {
+            const visited = new Set();
+            const stack = [start];
+            
+            while (stack.length > 0) {
+                const vertex = stack.pop();
+                if (!visited.has(vertex)) {
+                    visited.add(vertex);
+                    stack.push(...graph[vertex].filter(v => !visited.has(v)));
+                }
+            }
+            return Array.from(visited);
+        }
+
+        // 5. Floyd-Warshall算法
+        function floydWarshall(graph) {
+            const dist = Array.from(graph.map(row => [...row]));
+            const V = graph.length;
+            
+            for (let k = 0; k < V; k++) {
+                for (let i = 0; i < V; i++) {
+                    for (let j = 0; j < V; j++) {
+                        if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                            dist[i][j] = dist[i][k] + dist[k][j];
+                        }
+                    }
+                }
+            }
+            return dist;
+        }
+
+        // 测试代码
+        function runTests() {
+            // 测试快速排序
+            const arr = [64, 34, 25, 12, 22, 11, 90];
+            console.log('快速排序结果:', quickSort(arr));
+
+            // 测试二分查找
+            const sortedArr = [11, 12, 22, 25, 34, 64, 90];
+            console.log('二分查找结果:', binarySearch(sortedArr, 25));
+
+            // 测试MD5
+            console.log('MD5结果:', simpleMD5('test'));
+
+            // 测试DFS
+            const graph = {
+                'A': ['B', 'C'],
+                'B': ['A', 'D', 'E'],
+                'C': ['A', 'F'],
+                'D': ['B'],
+                'E': ['B', 'F'],
+                'F': ['C', 'E']
+            };
+            console.log('DFS结果:', depthFirstSearch(graph, 'A'));
+
+            // 测试Floyd-Warshall
+            const graphMatrix = [
+                [0, 5, Infinity, 10],
+                [Infinity, 0, 3, Infinity],
+                [Infinity, Infinity, 0, 1],
+                [Infinity, Infinity, Infinity, 0]
+            ];
+            console.log('Floyd-Warshall结果:', floydWarshall(graphMatrix));
+        }
+
+        // 运行测试
+        runTests();
+    </script>
+</body>
+</html> 
